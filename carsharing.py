@@ -4,7 +4,7 @@ import uvicorn
 from fastapi import FastAPI
 from fastapi import HTTPException
 from pydantic import json
-from schemas import load_db, save_db, CarInput, CarOutput
+from schemas import load_db, save_db, CarInput, CarOutput, TripInput, TripOutput
 
 app = FastAPI(title="Car Sharing")
 
@@ -29,7 +29,7 @@ def get_cars(size: Optional[str] = None, doors: Optional[int] = None) -> list:
 def car_by_id(id: int):
     for car in db:
         if car.id == id:
-          return car
+            return car
     else:
         raise HTTPException(status_code=404, detail=f"No car with id={id}.")
 
@@ -44,6 +44,21 @@ def add_car(car: CarInput) -> CarOutput:
     save_db(db)
     return new_car
 
+
+@app.post("/api/cars/{car_id}/trips", response_model=TripOutput)
+def add_trip(car_id: int, trip: TripInput) -> TripOutput:
+    matches = [car for car in db if car.id == car_id]
+    if matches:
+        car = matches[0]
+        new_trip = TripOutput(id=len(car.trips)+1,
+                              start=trip.start,
+                              end=trip.end,
+                              description=trip.description)
+        car.trips.append(new_trip)
+        save_db(db)
+        return new_trip
+    else:
+        raise HTTPException(status_code=404, detail=f"No car with id={car_id}")
 
 
 @app.delete("/api/cars/{id}", status_code=204)

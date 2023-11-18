@@ -4,90 +4,123 @@
         "fuel": "gasoline",
         "doors": 3,
         "transmission": "auto",
-        "id": 1
+        "id": 1,
+        "trips": [
+            {
+                "start": 0,
+                "end": 5,
+                "description": "Groceries",
+                "id": 1
+            },
+            {
+                "start": 5,
+                "end": 218,
+                "description": "Commute Amsterdam-Rotterdam",
+                "id": 2
+            },
+            {
+                "start": 218,
+                "end": 257,
+                "description": "Weekend beach trip",
+                "id": 3
+            },
+            {
+                "start": 1000,
+                "end": 1500,
+                "description": "4th trip",
+                "id": 4
+            }
+        ]
     },
     {
         "size": "s",
         "fuel": "electric",
         "doors": 3,
         "transmission": "auto",
-        "id": 2
+        "id": 2,
+        "trips": [
+            {
+                "start": 0,
+                "end": 34,
+                "description": "Taking dog to the vet",
+                "id": 4
+            },
+            {
+                "start": 34,
+                "end": 125,
+                "description": "Meeting Customer in Utrecht",
+                "id": 5
+            }
+        ]
     },
     {
         "size": "s",
         "fuel": "gasoline",
         "doors": 5,
         "transmission": "manual",
-        "id": 3
+        "id": 3,
+        "trips": []
     },
     {
         "size": "m",
         "fuel": "electric",
         "doors": 3,
         "transmission": "auto",
-        "id": 4
-    },
-    {
-        "size": "postman-sized",
-        "fuel": "gas",
-        "doors": 6,
-        "transmission": "manu",
-        "id": 5
+        "id": 4,
+        "trips": [
+            {
+                "start": 0,
+                "end": 100,
+                "description": "Visiting mom",
+                "id": 6
+            }
+        ]
     },
     {
         "size": "m",
         "fuel": "gasoline",
         "doors": 5,
         "transmission": "manual",
-        "id": 6
+        "id": 6,
+        "trips": []
     },
     {
         "size": "l",
         "fuel": "diesel",
         "doors": 5,
         "transmission": "manual",
-        "id": 7
+        "id": 7,
+        "trips": []
     },
     {
         "size": "l",
         "fuel": "electric",
         "doors": 5,
         "transmission": "auto",
-        "id": 8
+        "id": 8,
+        "trips": []
     },
     {
         "size": "l",
         "fuel": "hybrid",
         "doors": 5,
         "transmission": "auto",
-        "id": 9
+        "id": 9,
+        "trips": [
+            {
+                "start": 0,
+                "end": 55,
+                "description": "Forest walk",
+                "id": 7
+            }
+        ]
     },
     {
-        "size": "s",
+        "size": "xl",
         "fuel": "electric",
-        "doors": 3,
+        "doors": 5,
         "transmission": "auto",
-        "id": 10
-    },
-    {
-        "size": "m",
-        "fuel": "electric",
-        "doors": 5,
-        "transmission": "auto",
-        "id": 11
-    },
-    {
-        "size": "l",
-        "fuel": "electric",
-        "doors": 5,
-        "transmission": "manual",
-        "id": 12
-    },
-    {
-        "size": "l",
-        "fuel": "diesel",
-        "doors": 5,
-        "transmission": "manual",
-        "id": 13
+        "id": 10,
+        "trips": []
     }
 ]
