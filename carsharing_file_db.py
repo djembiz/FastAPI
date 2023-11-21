@@ -1,27 +1,14 @@
 from datetime import datetime
-from typing import Optional, Sequence
+from typing import Optional
 import uvicorn
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI
+from fastapi import HTTPException
 from pydantic import json
-from schemas import load_db, save_db, CarInput, CarOutput, TripInput, TripOutput, Car
-from sqlmodel import create_engine, SQLModel, Session, select
+from schemas import load_db, save_db, CarInput, CarOutput, TripInput, TripOutput
 
 app = FastAPI(title="Car Sharing")
 
 db = load_db()
-
-
-engine = create_engine(
-    url="sqlite:///carsharing.db",
-    connect_args={"check_same_thread": False},
-    echo=True
-)
-
-
-@app.on_event("startup")
-def on_startup():
-    SQLModel.metadata.create_all(engine)
-
 
 @app.get("/")
 def welcome(name):
@@ -30,14 +17,12 @@ def welcome(name):
 
 
 @app.get("/api/cars")
-def get_cars(size: str | None = None, doors: int | None = None) -> Sequence[Car]:
-    with Session(engine) as session:
-        query = select(Car)
-        if size:
-            query = query.where(Car.size == size)
+def get_cars(size: Optional[str] = None, doors: Optional[int] = None) -> list:
+    result = db
+    if size:
         if doors:
-            query = query.where(Car.doors >= doors)
-        return session.exec(query).all()
+            result = [car for car in db if (car.size == size and car.doors >= doors)]
+    return result
 
 
 @app.get("/api/cars/{id}")
@@ -49,14 +34,15 @@ def car_by_id(id: int):
         raise HTTPException(status_code=404, detail=f"No car with id={id}.")
 
 
-@app.post("/api/cars/", response_model=Car)
-def add_car(car_input: CarInput) -> Car:
-    with Session(engine) as session:
-        new_car = Car.from_orm(car_input)
-        session.add(new_car)
-        session.commit()
-        session.refresh(new_car)
-        return new_car
+@app.post("/api/cars/", response_model=CarOutput)
+def add_car(car: CarInput) -> CarOutput:
+    new_car = CarOutput(size=car.size,
+                        doors=car.doors, fuel=car.fuel,
+                        transmission=car.transmission,
+                        id=len(db)+1)
+    db.append(new_car)
+    save_db(db)
+    return new_car
 
 
 @app.post("/api/cars/{car_id}/trips", response_model=TripOutput)
