@@ -71,6 +71,7 @@ def remove_car(id: int) -> None:
     else:
         raise HTTPException(status_code=404, detail=f"No Car with ID={id}")
 
+
 @app.put("/api/cars/{id}", response_model=CarOutput)
 def change_car(id: int, new_data: CarOutput) -> CarOutput:
     matches = [car for car in db if car.id == id]
@@ -90,3 +91,6 @@ def change_car(id: int, new_data: CarOutput) -> CarOutput:
 def date():
     """Return the date and time"""
     return {"date": datetime.now()}
+
+if __name__ == "__main__":
+    uvicorn.run("carsharing:app",reload=True)
