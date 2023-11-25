@@ -1,5 +1,25 @@
-from pydantic import BaseModel
-from sqlmodel import SQLModel, Field, Relationship
+from passlib.context import CryptContext
+from sqlmodel import SQLModel, Field, Relationship, Column, VARCHAR
+
+
+pwd_context = CryptContext(schemes=["bcrypt"])
+
+
+class UserOutput(SQLModel):
+    id: int
+    username: str
+
+
+class User(SQLModel, table=True):
+    id: int | None = Field(default=None, primary_key=True)
+    username: str = Field(sa_column=Column("username", VARCHAR, unique=True, index=True))
+    password_hash: str = ""
+
+    def set_password(self, password):
+        self.password_hash = pwd_context.hash(password)
+
+    def verify_password(self, password):
+        return pwd_context.verify(password, self.password_hash)
 
 
 class TripInput(SQLModel):
@@ -13,7 +33,7 @@ class TripOutput(TripInput):
 
 
 class Trip(TripInput, table=True):
-    id: int | None = Field(default = None, primary_key=True)
+    id: int | None = Field(default=None, primary_key=True)
     car_id: int = Field(foreign_key="car.id")
     car: "Car" = Relationship(back_populates="trips")
 
@@ -44,11 +64,3 @@ class Config:
             "fuel": "hybrid"
         }
     }
-
-
-
-
-
-
-
-
